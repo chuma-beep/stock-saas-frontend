@@ -2,7 +2,13 @@
 
 import { useEffect, useState } from "react"
 
-const SAMPLE_STOCKS = [
+interface StockPrice {
+  symbol: string
+  price: number
+  change: number
+}
+
+const FALLBACK_STOCKS: StockPrice[] = [
   { symbol: "AAPL", price: 195.71, change: 2.3 },
   { symbol: "MSFT", price: 420.55, change: -0.8 },
   { symbol: "GOOGL", price: 178.23, change: 1.5 },
@@ -11,17 +17,49 @@ const SAMPLE_STOCKS = [
 ]
 
 export function Hero() {
+  const [stocks, setStocks] = useState<StockPrice[]>(FALLBACK_STOCKS)
   const [tickerIndex, setTickerIndex] = useState(0)
+  const [loading, setLoading] = useState(true)
+  const [isLive, setIsLive] = useState(false)
+
+  useEffect(() => {
+    // Fetch real stock prices
+    const fetchPrices = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/current-prices')
+        if (!response.ok) throw new Error('Failed to fetch')
+        
+        const data = await response.json()
+        if (data.stocks && data.stocks.length > 0) {
+          setStocks(data.stocks)
+          setIsLive(true)
+        }
+      } catch (error) {
+        console.log('Using fallback prices:', error)
+        setIsLive(false)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchPrices()
+    
+    // Refresh every 60 seconds
+    const refreshInterval = setInterval(fetchPrices, 60000)
+    
+    return () => clearInterval(refreshInterval)
+  }, [])
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTickerIndex((prev) => (prev + 1) % SAMPLE_STOCKS.length)
+      setTickerIndex((prev) => (prev + 1) % stocks.length)
     }, 3000)
     return () => clearInterval(interval)
-  }, [])
+  }, [stocks.length])
 
   return (
     <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+      {/* Animated background ticker */}
       <div className="absolute inset-0 opacity-5 pointer-events-none">
         <div className="absolute top-0 left-0 w-full h-full">
           {[...Array(5)].map((_, i) => (
@@ -34,24 +72,32 @@ export function Hero() {
                 animation: `ticker ${10 + i * 2}s linear infinite`,
               }}
             >
-              {SAMPLE_STOCKS.map((s) => `${s.symbol} `).join("")}
+              {stocks.map((s) => `${s.symbol} `).join("")}
             </div>
           ))}
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto relative">
+        {/* Main heading */}
         <div className="text-center max-w-4xl mx-auto mb-12">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance leading-tight">
-            Compare Stock Performance <span className="text-[#0066ff]">Across Any Time Period</span>
+            Compare Stock Performance{" "}
+            <span className="text-[#0066ff]">Across Any Time Period</span>
           </h1>
           <p className="text-xl md:text-2xl text-muted-foreground text-pretty">
             Discover seasonal patterns and make data-driven decisions
           </p>
         </div>
 
+        {/* Stock ticker display */}
         <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
-          {SAMPLE_STOCKS.map((stock, index) => (
+          {loading && (
+            <div className="text-muted-foreground animate-pulse">
+              Loading live prices...
+            </div>
+          )}
+          {!loading && stocks.map((stock, index) => (
             <div
               key={stock.symbol}
               className={`flex items-center gap-2 transition-all duration-500 ${
@@ -59,14 +105,30 @@ export function Hero() {
               }`}
             >
               <span className="font-mono font-bold">{stock.symbol}</span>
-              <span className="text-muted-foreground">${stock.price}</span>
+              <span className="text-muted-foreground">${stock.price.toFixed(2)}</span>
               <span className={stock.change >= 0 ? "text-green-500" : "text-red-500"}>
                 {stock.change >= 0 ? "+" : ""}
-                {stock.change}%
+                {stock.change.toFixed(2)}%
               </span>
             </div>
           ))}
         </div>
+
+        {/* Status indicator */}
+        {!loading && (
+          <div className="text-center mt-4">
+            {isLive ? (
+              <p className="text-xs text-muted-foreground flex items-center justify-center gap-2">
+                <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                Live data from our database
+              </p>
+            ) : (
+              <p className="text-xs text-muted-foreground">
+                Sample data • Fetch stocks to see live prices
+              </p>
+            )}
+          </div>
+        )}
       </div>
 
       <style jsx>{`
