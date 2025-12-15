@@ -5,68 +5,76 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { StockChart } from "./StockChart"
-import { Search, TrendingUp, TrendingDown, Calendar } from "lucide-react"
-
-
+import { Search, TrendingUp, TrendingDown, Calendar, AlertCircle } from "lucide-react"
+import { api, type ComparisonResponse } from "../lib/api"
 
 const POPULAR_STOCKS = ["AAPL", "MSFT", "GOOGL", "TSLA", "AMZN", "NVDA", "META"]
-const DATE_PRESETS = [
-  "Last 30 Days",
-  "Last Quarter",
-  "Christmas Season",
-  "Black Friday Week",
-  "Earnings Season",
-  "Custom Range",
-]
 
-interface StockData {
-  symbol: string
-  name: string
-  priceChange: number
-  startPrice: number
-  endPrice: number
-  high: number
-  low: number
-  volume: string
-}
+const DATE_PRESETS = [
+  { label: "Last 30 Days", start: "2025-11-12", end: "2025-12-12" },
+  { label: "Last Quarter", start: "2025-09-12", end: "2025-12-12" },
+  { label: "Christmas Season", start: "2025-11-01", end: "2025-12-31" },
+  { label: "Black Friday Week", start: "2025-11-20", end: "2025-11-30" },
+  { label: "Earnings Season", start: "2025-10-01", end: "2025-11-30" },
+]
 
 export function Dashboard() {
   const [stock1, setStock1] = useState("AAPL")
   const [stock2, setStock2] = useState("MSFT")
-  const [selectedPreset, setSelectedPreset] = useState("Last 30 Days")
+  const [startDate, setStartDate] = useState("2025-11-01")
+  const [endDate, setEndDate] = useState("2025-12-11")
+  const [selectedPreset, setSelectedPreset] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
-  const [showResults, setShowResults] = useState(false)
+  const [isFetching, setIsFetching] = useState<string | null>(null)
+  const [comparison, setComparison] = useState<ComparisonResponse | null>(null)
+  const [error, setError] = useState<string>("")
 
-  const handleCompare = () => {
-    setIsLoading(true)
-    setTimeout(() => {
-      setIsLoading(false)
-      setShowResults(true)
-    }, 1500)
+  const handlePresetClick = (preset: typeof DATE_PRESETS[0]) => {
+    setSelectedPreset(preset.label)
+    setStartDate(preset.start)
+    setEndDate(preset.end)
   }
 
-  const mockData: StockData[] = [
-    {
-      symbol: stock1,
-      name: "Apple Inc.",
-      priceChange: 12.4,
-      startPrice: 174.23,
-      endPrice: 195.71,
-      high: 198.45,
-      low: 172.1,
-      volume: "58.2M",
-    },
-    {
-      symbol: stock2,
-      name: "Microsoft Corporation",
-      priceChange: 8.7,
-      startPrice: 387.15,
-      endPrice: 420.55,
-      high: 425.3,
-      low: 385.0,
-      volume: "42.8M",
-    },
-  ]
+  const handleFetchStock = async (ticker: string) => {
+    setIsFetching(ticker)
+    setError("")
+    try {
+      const result = await api.fetchStock(ticker)
+      alert(`✅ Fetched ${result.records} records for ${ticker}`)
+    } catch (err: any) {
+      setError(`Failed to fetch ${ticker}: ${err.message}`)
+    } finally {
+      setIsFetching(null)
+    }
+  }
+
+  const handleCompare = async () => {
+    setIsLoading(true)
+    setError("")
+    try {
+      const result = await api.compareStocks(stock1, stock2, startDate, endDate)
+      setComparison(result)
+    } catch (err: any) {
+      setError(err.message || "Failed to compare stocks. Make sure you've fetched them first!")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const getStockStats = (stockData: ComparisonResponse['comparison'][0]) => {
+    if (!stockData.data || stockData.data.length === 0) return null
+
+    const prices = stockData.data.map(d => d.close)
+    const volumes = stockData.data.map(d => d.volume)
+    
+    return {
+      startPrice: stockData.data[0].close,
+      endPrice: stockData.data[stockData.data.length - 1].close,
+      high: Math.max(...prices),
+      low: Math.min(...prices),
+      avgVolume: (volumes.reduce((a, b) => a + b, 0) / volumes.length / 1000000).toFixed(1) + "M",
+    }
+  }
 
   return (
     <section id="dashboard" className="py-20 px-4 sm:px-6 lg:px-8 bg-muted/30">
@@ -94,16 +102,30 @@ export function Dashboard() {
               ))}
             </div>
 
-            <h3 className="font-semibold mb-4">Recently Compared</h3>
-            <div className="space-y-2">
-              {["AAPL vs MSFT", "GOOGL vs META", "TSLA vs RIVN"].map((pair) => (
-                <button
-                  key={pair}
-                  className="w-full text-left px-3 py-2 rounded-lg hover:bg-accent text-sm transition-colors"
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold mb-2 text-sm">Quick Actions</h3>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => handleFetchStock(stock1)}
+                  disabled={isFetching === stock1}
                 >
-                  {pair}
-                </button>
-              ))}
+                  {isFetching === stock1 ? "Fetching..." : `Fetch ${stock1}`}
+                </Button>
+              </div>
+              <div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={() => handleFetchStock(stock2)}
+                  disabled={isFetching === stock2}
+                >
+                  {isFetching === stock2 ? "Fetching..." : `Fetch ${stock2}`}
+                </Button>
+              </div>
             </div>
           </Card>
 
@@ -136,20 +158,59 @@ export function Dashboard() {
                   <Calendar className="h-5 w-5" />
                   Date Range
                 </h3>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-4">
                   {DATE_PRESETS.map((preset) => (
                     <Button
-                      key={preset}
-                      variant={selectedPreset === preset ? "default" : "outline"}
+                      key={preset.label}
+                      variant={selectedPreset === preset.label ? "default" : "outline"}
                       size="sm"
-                      onClick={() => setSelectedPreset(preset)}
-                      className={selectedPreset === preset ? "bg-[#0066ff] hover:bg-[#0052cc] text-white" : ""}
+                      onClick={() => handlePresetClick(preset)}
+                      className={selectedPreset === preset.label ? "bg-[#0066ff] hover:bg-[#0052cc] text-white" : ""}
                     >
-                      {preset}
+                      {preset.label}
                     </Button>
                   ))}
                 </div>
+
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">Start Date</label>
+                    <Input
+                      type="date"
+                      value={startDate}
+                      onChange={(e) => {
+                        setStartDate(e.target.value)
+                        setSelectedPreset(null)
+                      }}
+                      className="h-10"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-sm text-muted-foreground mb-1 block">End Date</label>
+                    <Input
+                      type="date"
+                      value={endDate}
+                      onChange={(e) => {
+                        setEndDate(e.target.value)
+                        setSelectedPreset(null)
+                      }}
+                      className="h-10"
+                    />
+                  </div>
+                </div>
               </div>
+
+              {error && (
+                <div className="mb-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-2">
+                  <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm text-destructive">{error}</p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Tip: Click &quot;Fetch&quot; for both stocks before comparing
+                    </p>
+                  </div>
+                </div>
+              )}
 
               <Button
                 onClick={handleCompare}
@@ -169,62 +230,74 @@ export function Dashboard() {
             </Card>
 
             {/* Results */}
-            {showResults && (
+            {comparison && (
               <>
                 <div className="grid md:grid-cols-2 gap-6">
-                  {mockData.map((data, index) => (
-                    <Card
-                      key={data.symbol}
-                      className="p-6 bg-card/50 backdrop-blur-sm border-2 hover:border-[#0066ff]/50 transition-all"
-                    >
-                      <div className="flex items-start justify-between mb-4">
-                        <div>
-                          <h3 className="text-2xl font-bold font-mono">{data.symbol}</h3>
-                          <p className="text-sm text-muted-foreground">{data.name}</p>
-                        </div>
-                        {data.priceChange >= 0 ? (
-                          <TrendingUp className="h-8 w-8 text-green-500" />
-                        ) : (
-                          <TrendingDown className="h-8 w-8 text-red-500" />
-                        )}
-                      </div>
+                  {comparison.comparison.map((stockData) => {
+                    const stats = getStockStats(stockData)
+                    if (!stats) return null
 
-                      <div
-                        className={`text-4xl font-bold mb-6 ${
-                          data.priceChange >= 0 ? "text-green-500" : "text-red-500"
-                        }`}
+                    return (
+                      <Card
+                        key={stockData.ticker}
+                        className="p-6 bg-card/50 backdrop-blur-sm border-2 hover:border-[#0066ff]/50 transition-all"
                       >
-                        {data.priceChange >= 0 ? "+" : ""}
-                        {data.priceChange}%
-                      </div>
+                        <div className="flex items-start justify-between mb-4">
+                          <div>
+                            <h3 className="text-2xl font-bold font-mono">{stockData.ticker}</h3>
+                            <p className="text-sm text-muted-foreground">
+                              {comparison.start_date} to {comparison.end_date}
+                            </p>
+                          </div>
+                          {stockData.percent_change >= 0 ? (
+                            <TrendingUp className="h-8 w-8 text-green-500" />
+                          ) : (
+                            <TrendingDown className="h-8 w-8 text-red-500" />
+                          )}
+                        </div>
 
-                      <div className="space-y-3 text-sm">
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Start Price</span>
-                          <span className="font-semibold">${data.startPrice}</span>
+                        <div
+                          className={`text-4xl font-bold mb-6 ${
+                            stockData.percent_change >= 0 ? "text-green-500" : "text-red-500"
+                          }`}
+                        >
+                          {stockData.percent_change >= 0 ? "+" : ""}
+                          {stockData.percent_change.toFixed(2)}%
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">End Price</span>
-                          <span className="font-semibold">${data.endPrice}</span>
+
+                        <div className="space-y-3 text-sm">
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Start Price</span>
+                            <span className="font-semibold">${stats.startPrice.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">End Price</span>
+                            <span className="font-semibold">${stats.endPrice.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">High</span>
+                            <span className="font-semibold text-green-500">${stats.high.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Low</span>
+                            <span className="font-semibold text-red-500">${stats.low.toFixed(2)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span className="text-muted-foreground">Avg Volume</span>
+                            <span className="font-semibold">{stats.avgVolume}</span>
+                          </div>
                         </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">High</span>
-                          <span className="font-semibold text-green-500">${data.high}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Low</span>
-                          <span className="font-semibold text-red-500">${data.low}</span>
-                        </div>
-                        <div className="flex justify-between">
-                          <span className="text-muted-foreground">Avg Volume</span>
-                          <span className="font-semibold">{data.volume}</span>
-                        </div>
-                      </div>
-                    </Card>
-                  ))}
+                      </Card>
+                    )
+                  })}
                 </div>
 
-                <StockChart />
+                <StockChart 
+                  data1={comparison.comparison[0].data}
+                  data2={comparison.comparison[1].data}
+                  ticker1={comparison.comparison[0].ticker}
+                  ticker2={comparison.comparison[1].ticker}
+                />
               </>
             )}
           </div>
