@@ -7,6 +7,8 @@ import { useState, useEffect } from "react"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { Area, AreaChart as RechartsAreaChart, Line, LineChart as RechartsLineChart, CartesianGrid, XAxis, YAxis, Legend } from "recharts"
 import type { StockData } from "../lib/api"
+import { Hourglass } from 'react-loader-spinner';
+
 
 interface StockChartProps {
   data1: StockData[]
@@ -19,6 +21,9 @@ export function StockChart({ data1, data2, ticker1, ticker2 }: StockChartProps) 
   const [mounted, setMounted] = useState(false)
   const [chartType, setChartType] = useState<"line" | "area">("area")
 
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Create dynamic chart config based on actual tickers
   const chartConfig = {
@@ -66,6 +71,15 @@ export function StockChart({ data1, data2, ticker1, ticker2 }: StockChartProps) 
       <Card className="p-6 bg-card/50 backdrop-blur-sm">
         <div className="h-[400px] flex items-center justify-center">
           <p className="text-muted-foreground">Loading chart...</p>
+
+  <Hourglass
+    visible={true}
+    height="80"
+    width="80"
+    ariaLabel="hourglass-loading"
+    colors={['#306cce', '#72a1ed']}
+  />
+ 
         </div>
       </Card>
     )
