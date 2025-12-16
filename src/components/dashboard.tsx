@@ -49,6 +49,7 @@ export function Dashboard() {
   const [error, setError] = useState<string>("")
   const [aiAnalysis, setAiAnalysis] = useState<string>("")
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [stockPrices, setStockPrices] = useState<Record<string, { price: number; change: number }>>({})
 
   const handlePresetClick = (preset: typeof DATE_PRESETS[0]) => {
     setSelectedPreset(preset.label)
@@ -61,9 +62,26 @@ export function Dashboard() {
     setError("")
     try {
       const result = await api.fetchStock(ticker)
-        toast.success(`Fetched ${result.records} records for ${ticker}`)
+      toast.success(`Fetched ${result.records} records for ${ticker}`)
+      
+      // Fetch current price after successful fetch
+      try {
+        const priceRes = await fetch('http://localhost:8080/current-prices')
+        if (priceRes.ok) {
+          const priceData = await priceRes.json()
+          const stockPrice = priceData.stocks?.find((p: any) => p.symbol === ticker)
+          if (stockPrice) {
+            setStockPrices(prev => ({
+              ...prev,
+              [ticker]: { price: stockPrice.price, change: stockPrice.change }
+            }))
+          }
+        }
+      } catch {
+        // Silently fail - price display is optional
+      }
     } catch (err: any) {
-        toast.error(`Failed to fetch ${ticker}: ${err.message}`)
+      toast.error(`Failed to fetch ${ticker}: ${err.message}`)
     } finally {
       setIsFetching(null)
     }
@@ -175,23 +193,43 @@ export function Dashboard() {
           <div className="lg:col-span-9 space-y-6">
             <Card className="p-6 bg-card/50 backdrop-blur-sm">
               <div className="grid md:grid-cols-2 gap-4 mb-6">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <Input
-                    value={stock1}
-                    onChange={(e) => setStock1(e.target.value.toUpperCase())}
-                    placeholder="Search stock symbol..."
-                    className="pl-10 h-12 font-mono"
-                  />
+                <div>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      value={stock1}
+                      onChange={(e) => setStock1(e.target.value.toUpperCase())}
+                      placeholder="Search stock symbol..."
+                      className="pl-10 h-12 font-mono"
+                    />
+                  </div>
+                  {stockPrices[stock1] && (
+                    <p className="mt-1 text-xs text-muted-foreground pl-1">
+                      ${stockPrices[stock1].price.toFixed(2)}{" "}
+                      <span className={stockPrices[stock1].change >= 0 ? "text-green-500" : "text-red-500"}>
+                        ({stockPrices[stock1].change >= 0 ? "+" : ""}{stockPrices[stock1].change.toFixed(2)}%)
+                      </span>
+                    </p>
+                  )}
                 </div>
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                  <Input
-                    value={stock2}
-                    onChange={(e) => setStock2(e.target.value.toUpperCase())}
-                    placeholder="Search stock symbol..."
-                    className="pl-10 h-12 font-mono"
-                  />
+                <div>
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      value={stock2}
+                      onChange={(e) => setStock2(e.target.value.toUpperCase())}
+                      placeholder="Search stock symbol..."
+                      className="pl-10 h-12 font-mono"
+                    />
+                  </div>
+                  {stockPrices[stock2] && (
+                    <p className="mt-1 text-xs text-muted-foreground pl-1">
+                      ${stockPrices[stock2].price.toFixed(2)}{" "}
+                      <span className={stockPrices[stock2].change >= 0 ? "text-green-500" : "text-red-500"}>
+                        ({stockPrices[stock2].change >= 0 ? "+" : ""}{stockPrices[stock2].change.toFixed(2)}%)
+                      </span>
+                    </p>
+                  )}
                 </div>
               </div>
 
