@@ -5,17 +5,36 @@ import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { StockChart } from "./StockChart"
-import { Search, TrendingUp, TrendingDown, Calendar, AlertCircle } from "lucide-react"
+import { Search, TrendingUp, TrendingDown, Calendar, AlertCircle, Sparkles, Loader2 } from "lucide-react"
 import { api, type ComparisonResponse } from "../lib/api"
+import { toast } from "sonner"
+
+
 
 const POPULAR_STOCKS = ["AAPL", "MSFT", "GOOGL", "TSLA", "AMZN", "NVDA", "META"]
 
+
+const iso = (d: Date) => d.toISOString().slice(0, 10)
+const today = new Date()
+
+
+
 const DATE_PRESETS = [
-  { label: "Last 30 Days", start: "2025-11-12", end: "2025-12-12" },
-  { label: "Last Quarter", start: "2025-09-12", end: "2025-12-12" },
-  { label: "Christmas Season", start: "2025-11-01", end: "2025-12-31" },
-  { label: "Black Friday Week", start: "2025-11-20", end: "2025-11-30" },
-  { label: "Earnings Season", start: "2025-10-01", end: "2025-11-30" },
+  {
+    label: "Last 30 Days",
+    start: iso(new Date(today.getTime() - 30 * 86400000)),
+    end: iso(today),
+  },
+  {
+    label: "Last Quarter",
+    start: iso(new Date(today.getTime() - 90 * 86400000)),
+    end: iso(today),
+  },
+  {
+    label: "YTD",
+    start: iso(new Date(today.getFullYear(), 0, 1)),
+    end: iso(today),
+  },
 ]
 
 export function Dashboard() {
@@ -28,6 +47,8 @@ export function Dashboard() {
   const [isFetching, setIsFetching] = useState<string | null>(null)
   const [comparison, setComparison] = useState<ComparisonResponse | null>(null)
   const [error, setError] = useState<string>("")
+  const [aiAnalysis, setAiAnalysis] = useState<string>("")
+  const [isAnalyzing, setIsAnalyzing] = useState(false)
 
   const handlePresetClick = (preset: typeof DATE_PRESETS[0]) => {
     setSelectedPreset(preset.label)
@@ -40,9 +61,9 @@ export function Dashboard() {
     setError("")
     try {
       const result = await api.fetchStock(ticker)
-      alert(`✅ Fetched ${result.records} records for ${ticker}`)
+        toast.success(`Fetched ${result.records} records for ${ticker}`)
     } catch (err: any) {
-      setError(`Failed to fetch ${ticker}: ${err.message}`)
+        toast.error(`Failed to fetch ${ticker}: ${err.message}`)
     } finally {
       setIsFetching(null)
     }
@@ -51,13 +72,34 @@ export function Dashboard() {
   const handleCompare = async () => {
     setIsLoading(true)
     setError("")
+    setAiAnalysis("")
     try {
+      // Get comparison data
       const result = await api.compareStocks(stock1, stock2, startDate, endDate)
       setComparison(result)
+     
+      // Get AI analysis
+      setIsAnalyzing(true)
+      const response = await fetch('http://localhost:8080/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          comparison: result,
+          preset: selectedPreset || 'Custom Range',
+        }),
+      })
+      
+      if (!response.ok) {
+        throw new Error('AI analysis failed')
+      }
+      
+      const data = await response.json()
+      setAiAnalysis(data.analysis)
     } catch (err: any) {
       setError(err.message || "Failed to compare stocks. Make sure you've fetched them first!")
     } finally {
       setIsLoading(false)
+      setIsAnalyzing(false)
     }
   }
 
@@ -291,6 +333,31 @@ export function Dashboard() {
                     )
                   })}
                 </div>
+
+                {/* AI Analysis Card */}
+                <Card className="p-6 bg-card/50 backdrop-blur-sm border-2 border-[#0066ff]/30">
+                  <div className="flex items-center gap-2 mb-4">
+                    <Sparkles className="h-6 w-6 text-[#0066ff]" />
+                    <h3 className="text-xl font-bold">AI Analysis</h3>
+                  </div>
+
+                  {isAnalyzing ? (
+                    <div className="flex items-center justify-center py-8">
+                      <Loader2 className="h-8 w-8 animate-spin text-[#0066ff]" />
+                      <span className="ml-3 text-muted-foreground">Generating insights...</span>
+                    </div>
+                  ) : aiAnalysis ? (
+                    <div className="prose prose-sm max-w-none">
+                      <p className="whitespace-pre-wrap text-foreground leading-relaxed">
+                        {aiAnalysis}
+                      </p>
+                    </div>
+                  ) : (
+                    <p className="text-muted-foreground text-sm">
+                      AI analysis will appear here after comparison
+                    </p>
+                  )}
+                </Card>
 
                 <StockChart 
                   data1={comparison.comparison[0].data}
