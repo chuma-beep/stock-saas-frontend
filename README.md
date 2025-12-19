@@ -167,7 +167,6 @@ pnpm type-check
 
 ## 📝 License
 
-This project is private and proprietary.
 
 ## 👤 Author
 
