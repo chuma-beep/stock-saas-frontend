@@ -146,7 +146,7 @@ export function Dashboard() {
 
         <div className="grid lg:grid-cols-12 gap-6">
           {/* Sidebar */}
-          <Card className="lg:col-span-3 p-6 bg-card/50 backdrop-blur-sm">
+          <div className="lg:col-span-3 p-6">
             <h3 className="font-semibold mb-4">Popular Stocks</h3>
             <div className="flex flex-wrap gap-2 mb-6">
               {POPULAR_STOCKS.map((symbol) => (
@@ -187,7 +187,7 @@ export function Dashboard() {
                 </Button>
               </div>
             </div>
-          </Card>
+          </div>
 
           {/* Main comparison area */}
           <div className="lg:col-span-9 space-y-6">
