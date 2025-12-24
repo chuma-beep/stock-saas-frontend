@@ -66,7 +66,7 @@ export function Dashboard() {
       
       // Fetch current price after successful fetch
       try {
-        const priceRes = await fetch('http://localhost:8080/current-prices')
+        const priceRes = await fetch(`${process.env.NEXT_API_URL}/current-prices`)
         if (priceRes.ok) {
           const priceData = await priceRes.json()
           const stockPrice = priceData.stocks?.find((p: any) => p.symbol === ticker)
@@ -98,7 +98,7 @@ export function Dashboard() {
      
       // Get AI analysis
       setIsAnalyzing(true)
-      const response = await fetch('http://localhost:8080/api/analyze', {
+      const response = await fetch(`${process.env.NEXT_API_URL}/api/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
