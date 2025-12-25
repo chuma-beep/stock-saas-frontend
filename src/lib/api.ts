@@ -55,4 +55,9 @@ export const api = {
     if (!res.ok) throw new Error('Failed to compare stocks');
     return res.json();
   },
+  async getCurrentPrices() {
+    const res = await fetch(`${API_URL}/current-prices`)
+    if (!res.ok) throw new Error('Failed to fetch current prices')
+    return res.json()
+  },
 };
