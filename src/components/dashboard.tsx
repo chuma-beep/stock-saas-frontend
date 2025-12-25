@@ -66,15 +66,21 @@ export function Dashboard() {
       
       // Fetch current price after successful fetch
       try {
-        const priceData = await api.getCurrentPrices()
-        const stockPrice = priceData.stocks?.find((p: any) => p.symbol === ticker)
-        if (stockPrice) {
-          setStockPrices(prev => ({
-            ...prev,
-            [ticker]: { price: stockPrice.price, change: stockPrice.change }
-          }))
+        const priceRes = await fetch('/api/current-prices')
+        if (priceRes.ok) {
+          const priceData = await priceRes.json()
+          const stockPrice = priceData.stocks?.find((p: any) => p.symbol === ticker)
+          if (stockPrice) {
+            setStockPrices(prev => ({
+              ...prev,
+              [ticker]: { price: stockPrice.price, change: stockPrice.change }
+            }))
+          }
+        } else {
+          console.error('Failed to fetch current prices:', await priceRes.text())
         }
-      } catch {
+      } catch (err) {
+        console.error('Error fetching current prices:', err)
         // Silently fail - price display is optional
       }
     } catch (err: any) {
