@@ -1,40 +1,48 @@
 "use client"
 
-import { Github, Twitter, Mail, Heart } from "lucide-react"
+import { Github, Twitter, Mail, Heart, Cpu, Database, Zap, Globe } from "lucide-react"
 import { FcAreaChart } from "react-icons/fc"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 
-const TECH_STACK = [
-  {
-    name: "Next.js 16",
-    description: "Modern React framework for the frontend",
-    color: "bg-white"
-  },
-  {
-    name: "Go (Golang)",
-    description: "High-performance backend API",
-    color: "bg-cyan-500"
-  },
-  {
-    name: "Groq AI",
-    description: "Fast Llama 3.3-70B model for insights",
-    color: "bg-orange-500"
-  },
-]
-
 const ABOUT_HIGHLIGHTS = [
   {
+    icon: Cpu,
     title: "Mission-Driven",
     description: "Democratize stock analysis tools that were once only available to institutional investors",
   },
   {
+    icon: Globe,
     title: "Open Source",
     description: "Transparent codebase built with modern technologies and best practices",
   },
   {
+    icon: Database,
     title: "Data Accuracy",
     description: "Real-time stock data from Alpha Vantage API with historical accuracy",
+  },
+]
+
+const TECH_STACK = [
+  {
+    name: "Next.js 15",
+    description: "Modern React framework for frontend",
+    icon: <Globe className="w-12 h-12 sm:w-16 sm:h-16 text-black" />,
+  },
+  {
+    name: "Go (Golang)",
+    description: "High-performance backend API",
+    icon: <Cpu className="w-12 h-12 sm:w-16 sm:h-16 text-cyan-500" />,
+  },
+  {
+    name: "Supabase",
+    description: "PostgreSQL database hosting",
+    icon: <Database className="w-12 h-12 sm:w-16 sm:h-16 text-emerald-500" />,
+  },
+  {
+    name: "Groq AI",
+    description: "Fast Llama 3.3-70B model for insights",
+    icon: <Zap className="w-12 h-12 sm:w-16 sm:h-16 text-orange-500" />,
   },
 ]
 
@@ -90,15 +98,21 @@ export function About() {
             Why Choose Us
           </h3>
           <div className="grid sm:grid-cols-3 gap-4 sm:gap-6">
-            {ABOUT_HIGHLIGHTS.map((highlight, index) => (
-              <Card
-                key={index}
-                className="p-4 sm:p-6 bg-card/50 backdrop-blur-sm hover:border-[#0066ff]/50 transition-all"
-              >
-                <h4 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3">{highlight.title}</h4>
-                <p className="text-xs sm:text-sm text-muted-foreground">{highlight.description}</p>
-              </Card>
-            ))}
+            {ABOUT_HIGHLIGHTS.map((highlight, index) => {
+              const Icon = highlight.icon
+              return (
+                <Card
+                  key={index}
+                  className="p-4 sm:p-6 bg-card/50 backdrop-blur-sm hover:border-[#0066ff]/50 transition-all"
+                >
+                  <div className="w-12 h-12 sm:w-14 sm:h-14 mb-3 sm:mb-4">
+                    <Icon className="w-full h-full text-[#0066ff]" />
+                  </div>
+                  <h4 className="text-lg sm:text-xl font-bold mb-2 sm:mb-3">{highlight.title}</h4>
+                  <p className="text-xs sm:text-sm text-muted-foreground">{highlight.description}</p>
+                </Card>
+              )
+            })}
           </div>
         </div>
 
@@ -113,10 +127,8 @@ export function About() {
                 key={index}
                 className="p-4 sm:p-6 bg-card/50 backdrop-blur-sm text-center hover:border-[#0066ff]/50 transition-all"
               >
-                <div className={`w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 rounded-full ${tech.color} flex items-center justify-center`}>
-                  <span className="text-2xl sm:text-3xl font-bold text-white">
-                    {tech.name.charAt(0)}
-                  </span>
+                <div className="w-12 h-12 sm:w-16 sm:h-16 mx-auto mb-3 sm:mb-4 flex items-center justify-center bg-muted rounded-lg">
+                  {tech.icon}
                 </div>
                 <h4 className="text-base sm:text-lg font-bold mb-1 sm:mb-2">{tech.name}</h4>
                 <p className="text-[10px] sm:text-xs text-muted-foreground">{tech.description}</p>
@@ -152,7 +164,7 @@ export function About() {
               variant="outline"
               size="lg"
               className="gap-2"
-              onClick={() => window.open("https://twitter.com/wisdomsglow", "_blank")}
+              onClick={() => window.open("https://twitter.com/chuma_beep", "_blank")}
             >
               <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
               Follow on Twitter
