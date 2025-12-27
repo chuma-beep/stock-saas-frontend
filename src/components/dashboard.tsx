@@ -101,7 +101,7 @@ export function Dashboard() {
      
       // Get AI analysis
       setIsAnalyzing(true)
-      const response = await fetch(`${process.env.NEXT_API_URL}/api/analyze`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
