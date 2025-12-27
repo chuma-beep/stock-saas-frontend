@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
-import { Moon, Sun } from "lucide-react"
+import { Moon, Sun, Menu, X } from "lucide-react"
 import { FcAreaChart } from "react-icons/fc";
 
 
 export function Navigation() {
   const [isDark, setIsDark] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme")
@@ -53,8 +54,8 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-2">
             <FcAreaChart className="w-8 h-8 text-[#0066ff]" />
-            
-            <span className="text-xl font-bold">StockCompare</span>
+
+            <span className="text-lg sm:text-xl font-bold">StockCompare</span>
           </div>
 
           <div className="hidden md:flex items-center gap-8">
@@ -66,7 +67,7 @@ export function Navigation() {
             </a>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <Button
               variant="ghost"
               size="icon"
@@ -78,7 +79,41 @@ export function Navigation() {
             </Button>
             <Button className="bg-[#0066ff] hover:bg-[#0052cc] text-white">Give Feedback</Button>
           </div>
+
+          <div className="md:hidden flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleDarkMode}
+              className="hover:bg-secondary"
+              aria-label="Toggle dark mode"
+            >
+              {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Toggle menu"
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
+
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-border py-4 space-y-4">
+            <a href="#how-it-works" className="block text-sm hover:text-[#0066ff] transition-colors" onClick={() => setMobileMenuOpen(false)}>
+              How It Works
+            </a>
+            <a href="#about" className="block text-sm hover:text-[#0066ff] transition-colors" onClick={() => setMobileMenuOpen(false)}>
+              About
+            </a>
+            <Button className="w-full bg-[#0066ff] hover:bg-[#0052cc] text-white" onClick={() => setMobileMenuOpen(false)}>
+              Give Feedback
+            </Button>
+          </div>
+        )}
       </div>
     </nav>
   )

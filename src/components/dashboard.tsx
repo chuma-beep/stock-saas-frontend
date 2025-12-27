@@ -147,17 +147,17 @@ export function Dashboard() {
           <p className="text-xl text-muted-foreground">Compare any two stocks across your chosen time period</p>
         </div>
 
-        <div className="grid lg:grid-cols-12 gap-6">
+        <div className="grid lg:grid-cols-12 gap-4 sm:gap-6">
           {/* Sidebar */}
-          <div className="lg:col-span-3 p-6">
-            <h3 className="font-semibold mb-4">Popular Stocks</h3>
-            <div className="flex flex-wrap gap-2 mb-6">
+          <div className="lg:col-span-3 p-4 sm:p-6">
+            <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Popular Stocks</h3>
+            <div className="flex flex-wrap gap-2 mb-4 sm:mb-6">
               {POPULAR_STOCKS.map((symbol) => (
                 <Button
                   key={symbol}
                   variant="outline"
                   size="sm"
-                  className="font-mono bg-transparent"
+                  className="font-mono bg-transparent text-xs sm:text-sm"
                   onClick={() => setStock1(symbol)}
                 >
                   {symbol}
@@ -165,13 +165,13 @@ export function Dashboard() {
               ))}
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               <div>
-                <h3 className="font-semibold mb-2 text-sm">Quick Actions</h3>
+                <h3 className="font-semibold mb-2 text-xs sm:text-sm">Quick Actions</h3>
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full"
+                  className="w-full text-xs sm:text-sm"
                   onClick={() => handleFetchStock(stock1)}
                   disabled={isFetching === stock1}
                 >
@@ -182,7 +182,7 @@ export function Dashboard() {
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full"
+                  className="w-full text-xs sm:text-sm"
                   onClick={() => handleFetchStock(stock2)}
                   disabled={isFetching === stock2}
                 >
@@ -193,21 +193,21 @@ export function Dashboard() {
           </div>
 
           {/* Main comparison area */}
-          <div className="lg:col-span-9 space-y-6">
-            <Card className="p-6 bg-card/50 backdrop-blur-sm">
-              <div className="grid md:grid-cols-2 gap-4 mb-6">
+          <div className="lg:col-span-9 space-y-4 sm:space-y-6">
+            <Card className="p-4 sm:p-6 bg-card/50 backdrop-blur-sm">
+              <div className="grid md:grid-cols-2 gap-4 mb-4 sm:mb-6">
                 <div>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
                     <Input
                       value={stock1}
                       onChange={(e) => setStock1(e.target.value.toUpperCase())}
                       placeholder="Search stock symbol..."
-                      className="pl-10 h-12 font-mono"
+                      className="pl-10 h-10 sm:h-12 font-mono text-sm"
                     />
                   </div>
                   {stockPrices[stock1] && (
-                    <p className="mt-1 text-xs text-muted-foreground pl-1">
+                    <p className="mt-1 text-[10px] sm:text-xs text-muted-foreground pl-1">
                       ${stockPrices[stock1].price.toFixed(2)}{" "}
                       <span className={stockPrices[stock1].change >= 0 ? "text-green-500" : "text-red-500"}>
                         ({stockPrices[stock1].change >= 0 ? "+" : ""}{stockPrices[stock1].change.toFixed(2)}%)
@@ -217,16 +217,16 @@ export function Dashboard() {
                 </div>
                 <div>
                   <div className="relative">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 sm:h-5 sm:w-5 text-muted-foreground" />
                     <Input
                       value={stock2}
                       onChange={(e) => setStock2(e.target.value.toUpperCase())}
                       placeholder="Search stock symbol..."
-                      className="pl-10 h-12 font-mono"
+                      className="pl-10 h-10 sm:h-12 font-mono text-sm"
                     />
                   </div>
                   {stockPrices[stock2] && (
-                    <p className="mt-1 text-xs text-muted-foreground pl-1">
+                    <p className="mt-1 text-[10px] sm:text-xs text-muted-foreground pl-1">
                       ${stockPrices[stock2].price.toFixed(2)}{" "}
                       <span className={stockPrices[stock2].change >= 0 ? "text-green-500" : "text-red-500"}>
                         ({stockPrices[stock2].change >= 0 ? "+" : ""}{stockPrices[stock2].change.toFixed(2)}%)
@@ -236,9 +236,9 @@ export function Dashboard() {
                 </div>
               </div>
 
-              <div className="mb-6">
-                <h3 className="font-semibold mb-3 flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
+              <div className="mb-4 sm:mb-6">
+                <h3 className="font-semibold mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base">
+                  <Calendar className="h-4 w-4 sm:h-5 sm:w-5" />
                   Date Range
                 </h3>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-4">
@@ -248,16 +248,16 @@ export function Dashboard() {
                       variant={selectedPreset === preset.label ? "default" : "outline"}
                       size="sm"
                       onClick={() => handlePresetClick(preset)}
-                      className={selectedPreset === preset.label ? "bg-[#0066ff] hover:bg-[#0052cc] text-white" : ""}
+                      className={selectedPreset === preset.label ? "bg-[#0066ff] hover:bg-[#0052cc] text-white" : "text-xs"}
                     >
                       {preset.label}
                     </Button>
                   ))}
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <label className="text-sm text-muted-foreground mb-1 block">Start Date</label>
+                    <label className="text-xs sm:text-sm text-muted-foreground mb-1 block">Start Date</label>
                     <Input
                       type="date"
                       value={startDate}
@@ -265,11 +265,11 @@ export function Dashboard() {
                         setStartDate(e.target.value)
                         setSelectedPreset(null)
                       }}
-                      className="h-10"
+                      className="h-9 sm:h-10 text-sm"
                     />
                   </div>
                   <div>
-                    <label className="text-sm text-muted-foreground mb-1 block">End Date</label>
+                    <label className="text-xs sm:text-sm text-muted-foreground mb-1 block">End Date</label>
                     <Input
                       type="date"
                       value={endDate}
@@ -277,18 +277,18 @@ export function Dashboard() {
                         setEndDate(e.target.value)
                         setSelectedPreset(null)
                       }}
-                      className="h-10"
+                      className="h-9 sm:h-10 text-sm"
                     />
                   </div>
                 </div>
               </div>
 
               {error && (
-                <div className="mb-4 p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-2">
-                  <AlertCircle className="h-5 w-5 text-destructive mt-0.5" />
+                <div className="mb-4 p-3 sm:p-4 bg-destructive/10 border border-destructive/20 rounded-lg flex items-start gap-2">
+                  <AlertCircle className="h-4 w-4 sm:h-5 sm:w-5 text-destructive mt-0.5 flex-shrink-0" />
                   <div className="flex-1">
-                    <p className="text-sm text-destructive">{error}</p>
-                    <p className="text-xs text-muted-foreground mt-1">
+                    <p className="text-xs sm:text-sm text-destructive">{error}</p>
+                    <p className="text-[10px] sm:text-xs text-muted-foreground mt-1">
                       Tip: Click &quot;Fetch&quot; for both stocks before comparing
                     </p>
                   </div>
@@ -298,7 +298,7 @@ export function Dashboard() {
               <Button
                 onClick={handleCompare}
                 size="lg"
-                className="w-full bg-[#0066ff] hover:bg-[#0052cc] text-white h-14 text-lg font-semibold"
+                className="w-full bg-[#0066ff] hover:bg-[#0052cc] text-white h-12 sm:h-14 text-base sm:text-lg font-semibold"
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -315,7 +315,7 @@ export function Dashboard() {
             {/* Results */}
             {comparison && (
               <>
-                <div className="grid md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                   {comparison.comparison.map((stockData) => {
                     const stats = getStockStats(stockData)
                     if (!stats) return null
@@ -323,24 +323,24 @@ export function Dashboard() {
                     return (
                       <Card
                         key={stockData.ticker}
-                        className="p-6 bg-card/50 backdrop-blur-sm border-2 hover:border-[#0066ff]/50 transition-all"
+                        className="p-4 sm:p-6 bg-card/50 backdrop-blur-sm border-2 hover:border-[#0066ff]/50 transition-all"
                       >
-                        <div className="flex items-start justify-between mb-4">
+                        <div className="flex items-start justify-between mb-3 sm:mb-4">
                           <div>
-                            <h3 className="text-2xl font-bold font-mono">{stockData.ticker}</h3>
-                            <p className="text-sm text-muted-foreground">
+                            <h3 className="text-xl sm:text-2xl font-bold font-mono">{stockData.ticker}</h3>
+                            <p className="text-[10px] sm:text-sm text-muted-foreground">
                               {comparison.start_date} to {comparison.end_date}
                             </p>
                           </div>
                           {stockData.percent_change >= 0 ? (
-                            <TrendingUp className="h-8 w-8 text-green-500" />
+                            <TrendingUp className="h-6 w-6 sm:h-8 sm:w-8 text-green-500 flex-shrink-0" />
                           ) : (
-                            <TrendingDown className="h-8 w-8 text-red-500" />
+                            <TrendingDown className="h-6 w-6 sm:h-8 sm:w-8 text-red-500 flex-shrink-0" />
                           )}
                         </div>
 
                         <div
-                          className={`text-4xl font-bold mb-6 ${
+                          className={`text-3xl sm:text-4xl font-bold mb-4 sm:mb-6 ${
                             stockData.percent_change >= 0 ? "text-green-500" : "text-red-500"
                           }`}
                         >
@@ -348,7 +348,7 @@ export function Dashboard() {
                           {stockData.percent_change.toFixed(2)}%
                         </div>
 
-                        <div className="space-y-3 text-sm">
+                        <div className="space-y-2 sm:space-y-3 text-xs sm:text-sm">
                           <div className="flex justify-between">
                             <span className="text-muted-foreground">Start Price</span>
                             <span className="font-semibold">${stats.startPrice.toFixed(2)}</span>
@@ -376,31 +376,31 @@ export function Dashboard() {
                 </div>
 
                 {/* AI Analysis Card */}
-                <Card className="p-6 bg-card/50 backdrop-blur-sm border-2 border-[#0066ff]/30">
-                  <div className="flex items-center gap-2 mb-4">
-                    <Sparkles className="h-6 w-6 text-[#0066ff]" />
-                    <h3 className="text-xl font-bold">AI Analysis</h3>
+                <Card className="p-4 sm:p-6 bg-card/50 backdrop-blur-sm border-2 border-[#0066ff]/30">
+                  <div className="flex items-center gap-2 mb-3 sm:mb-4">
+                    <Sparkles className="h-5 w-5 sm:h-6 sm:w-6 text-[#0066ff]" />
+                    <h3 className="text-lg sm:text-xl font-bold">AI Analysis</h3>
                   </div>
 
                   {isAnalyzing ? (
-                    <div className="flex items-center justify-center py-8">
-                      <Loader2 className="h-8 w-8 animate-spin text-[#0066ff]" />
-                      <span className="ml-3 text-muted-foreground">Generating insights...</span>
+                    <div className="flex items-center justify-center py-6 sm:py-8">
+                      <Loader2 className="h-6 w-6 sm:h-8 sm:w-8 animate-spin text-[#0066ff]" />
+                      <span className="ml-2 sm:ml-3 text-xs sm:text-sm text-muted-foreground">Generating insights...</span>
                     </div>
                   ) : aiAnalysis ? (
-                    <div className="prose prose-sm max-w-none">
-                      <p className="whitespace-pre-wrap text-foreground leading-relaxed">
+                    <div className="prose prose-xs sm:prose-sm max-w-none">
+                      <p className="whitespace-pre-wrap text-foreground leading-relaxed text-xs sm:text-sm">
                         {aiAnalysis}
                       </p>
                     </div>
                   ) : (
-                    <p className="text-muted-foreground text-sm">
+                    <p className="text-muted-foreground text-xs sm:text-sm">
                       AI analysis will appear here after comparison
                     </p>
                   )}
                 </Card>
 
-                <StockChart 
+                <StockChart
                   data1={comparison.comparison[0].data}
                   data2={comparison.comparison[1].data}
                   ticker1={comparison.comparison[0].ticker}

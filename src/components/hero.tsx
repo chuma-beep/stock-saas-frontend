@@ -58,9 +58,9 @@ export function Hero() {
   }, [stocks.length])
 
   return (
-    <section className="relative pt-32 pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
+    <section className="relative pt-28 sm:pt-32 pb-16 sm:pb-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
       {/* Animated background ticker */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
+      <div className="absolute inset-0 opacity-5 pointer-events-none hidden sm:block">
         <div className="absolute top-0 left-0 w-full h-full">
           {[...Array(5)].map((_, i) => (
             <div
@@ -80,18 +80,18 @@ export function Hero() {
 
       <div className="max-w-7xl mx-auto relative">
         {/* Main heading */}
-        <div className="text-center max-w-4xl mx-auto mb-12">
-          <h1 className="text-5xl md:text-7xl font-bold mb-6 text-balance leading-tight">
+        <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-12">
+          <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 text-balance leading-tight">
             Compare Stock Performance{" "}
             <span className="text-[#0066ff]">Across Any Time Period</span>
           </h1>
-          <p className="text-xl md:text-2xl text-muted-foreground text-pretty">
+          <p className="text-base sm:text-xl md:text-2xl text-muted-foreground text-pretty">
             Discover seasonal patterns and make data-driven decisions
           </p>
         </div>
 
         {/* Stock ticker display */}
-        <div className="flex flex-wrap items-center justify-center gap-6 text-sm">
+        <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-6 text-xs sm:text-sm">
           {loading && (
             <div className="text-muted-foreground animate-pulse">
               Loading live prices...
@@ -100,13 +100,13 @@ export function Hero() {
           {!loading && stocks.map((stock, index) => (
             <div
               key={stock.symbol}
-              className={`flex items-center gap-2 transition-all duration-500 ${
+              className={`flex items-center gap-1 sm:gap-2 transition-all duration-500 ${
                 index === tickerIndex ? "opacity-100 scale-110" : "opacity-40 scale-100"
               }`}
             >
-              <span className="font-mono font-bold">{stock.symbol}</span>
-              <span className="text-muted-foreground">${stock.price.toFixed(2)}</span>
-              <span className={stock.change >= 0 ? "text-green-500" : "text-red-500"}>
+              <span className="font-mono font-bold text-xs sm:text-sm">{stock.symbol}</span>
+              <span className="text-muted-foreground text-xs sm:text-sm">${stock.price.toFixed(2)}</span>
+              <span className={`${stock.change >= 0 ? "text-green-500" : "text-red-500"} text-xs sm:text-sm`}>
                 {stock.change >= 0 ? "+" : ""}
                 {stock.change.toFixed(2)}%
               </span>
@@ -116,14 +116,14 @@ export function Hero() {
 
         {/* Status indicator */}
         {!loading && (
-          <div className="text-center mt-4">
+          <div className="text-center mt-3 sm:mt-4">
             {isLive ? (
-              <p className="text-xs text-muted-foreground flex items-center justify-center gap-2">
+              <p className="text-[10px] sm:text-xs text-muted-foreground flex items-center justify-center gap-2">
                 <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
                 Live data from our database
               </p>
             ) : (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-[10px] sm:text-xs text-muted-foreground">
                 Sample data • Fetch stocks to see live prices
               </p>
             )}

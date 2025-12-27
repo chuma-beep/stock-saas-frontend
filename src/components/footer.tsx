@@ -13,21 +13,21 @@ export function Footer() {
 
   return (
     <footer id="about" className="border-t border-border bg-muted/30">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 sm:gap-6">
           <div className="flex items-center gap-2">
-            <FcAreaChart className="w-8 h-8 text-[#0066ff]" />
-            <span className="text-xl font-bold">StockCompare</span>
+            <FcAreaChart className="w-6 h-6 sm:w-8 sm:h-8 text-[#0066ff]" />
+            <span className="text-base sm:text-xl font-bold">StockCompare</span>
           </div>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-4 sm:gap-6">
             <a
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-[#0066ff] transition-colors"
             >
-              <Github className="h-5 w-5" />
+              <Github className="h-4 w-4 sm:h-5 sm:w-5" />
             </a>
             <a
               href="https://twitter.com"
@@ -35,22 +35,22 @@ export function Footer() {
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-[#0066ff] transition-colors"
             >
-              <Twitter className="h-5 w-5" />
+              <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
             </a>
-            <Button variant="link" className="text-[#0066ff] p-0 h-auto">
+            <Button variant="link" className="text-[#0066ff] p-0 h-auto text-sm sm:text-base">
               Give Feedback
             </Button>
           </div>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 sm:gap-8 mb-6 sm:mb-8 mt-6 sm:mt-8">
           {Object.entries(links).map(([category, items]) => (
             <div key={category}>
-              <h3 className="font-semibold mb-3">{category}</h3>
-              <ul className="space-y-2">
+              <h3 className="font-semibold mb-2 sm:mb-3 text-sm sm:text-base">{category}</h3>
+              <ul className="space-y-1 sm:space-y-2">
                 {items.map((item) => (
                   <li key={item}>
-                    <a href="#" className="text-sm text-muted-foreground hover:text-[#0066ff] transition-colors">
+                    <a href="#" className="text-xs sm:text-sm text-muted-foreground hover:text-[#0066ff] transition-colors">
                       {item}
                     </a>
                   </li>
@@ -60,8 +60,8 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="border-t border-border mt-8 pt-8 text-center">
-          <p className="text-sm text-muted-foreground">
+        <div className="border-t border-border mt-6 sm:mt-8 pt-6 sm:pt-8 text-center">
+          <p className="text-xs sm:text-sm text-muted-foreground">
             Made by <span className="text-foreground font-medium">@chuma-beep</span>
           </p>
         </div>
