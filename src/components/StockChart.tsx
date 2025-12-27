@@ -68,14 +68,14 @@ export function StockChart({ data1, data2, ticker1, ticker2 }: StockChartProps) 
 
   if (!mounted) {
     return (
-      <Card className="p-4 sm:p-6 bg-card/50 backdrop-blur-sm">
-        <div className="h-[250px] sm:h-[300px] md:h-[400px] flex items-center justify-center">
-          <p className="text-muted-foreground text-xs sm:text-sm">Loading chart...</p>
+      <Card className="p-3 sm:p-4 md:p-6 bg-card/50 backdrop-blur-sm">
+        <div className="h-[180px] sm:h-[250px] md:h-[300px] lg:h-[400px] flex items-center justify-center">
+          <p className="text-muted-foreground text-[10px] sm:text-xs">Loading chart...</p>
 
   <Hourglass
     visible={true}
-    height="60"
-    width="60"
+    height="50"
+    width="50"
     ariaLabel="hourglass-loading"
     colors={['#306cce', '#72a1ed']}
   />
@@ -86,9 +86,9 @@ export function StockChart({ data1, data2, ticker1, ticker2 }: StockChartProps) 
   }
 
   return (
-    <Card className="p-4 sm:p-6 bg-card/50 backdrop-blur-sm">
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4 sm:mb-6">
-        <h3 className="text-lg sm:text-xl font-semibold">Price Comparison</h3>
+    <Card className="p-3 sm:p-4 md:p-6 bg-card/50 backdrop-blur-sm">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-6">
+        <h3 className="text-base sm:text-lg md:text-xl font-semibold">Price Comparison</h3>
         <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto justify-end">
           <Button
             variant={chartType === "line" ? "default" : "outline"}
@@ -113,7 +113,7 @@ export function StockChart({ data1, data2, ticker1, ticker2 }: StockChartProps) 
         </div>
       </div>
 
-      <ChartContainer config={chartConfig} className="h-[250px] sm:h-[300px] md:h-[400px] w-full">
+      <ChartContainer config={chartConfig} className="h-[180px] sm:h-[250px] md:h-[300px] lg:h-[400px] w-full">
         {chartType === "area" ? (
           <RechartsAreaChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" className="stroke-muted" />
@@ -121,24 +121,26 @@ export function StockChart({ data1, data2, ticker1, ticker2 }: StockChartProps) 
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
-              className="text-[10px] sm:text-xs"
+              tickMargin={4}
+              interval="preserveStartEnd"
+              tickFormatter={(value) => value}
+              className="text-[9px] sm:text-[10px] md:text-xs"
             />
             <YAxis
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
-              className="text-[10px] sm:text-xs"
+              tickMargin={4}
+              className="text-[9px] sm:text-[10px] md:text-xs"
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: '10px' }} />
             <Area
               type="monotone"
               dataKey={ticker1.toLowerCase()}
               stroke="#0066ff"
               fill="#0066ff"
               fillOpacity={0.2}
-              strokeWidth={2}
+              strokeWidth={1.5}
               name={ticker1}
             />
             <Area
@@ -147,7 +149,7 @@ export function StockChart({ data1, data2, ticker1, ticker2 }: StockChartProps) 
               stroke="#00cc88"
               fill="#00cc88"
               fillOpacity={0.2}
-              strokeWidth={2}
+              strokeWidth={1.5}
               name={ticker2}
             />
           </RechartsAreaChart>
@@ -158,22 +160,24 @@ export function StockChart({ data1, data2, ticker1, ticker2 }: StockChartProps) 
               dataKey="date"
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
-              className="text-[10px] sm:text-xs"
+              tickMargin={4}
+              interval="preserveStartEnd"
+              tickFormatter={(value) => value}
+              className="text-[9px] sm:text-[10px] md:text-xs"
             />
             <YAxis
               tickLine={false}
               axisLine={false}
-              tickMargin={8}
-              className="text-[10px] sm:text-xs"
+              tickMargin={4}
+              className="text-[9px] sm:text-[10px] md:text-xs"
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            <Legend />
+            <Legend wrapperStyle={{ fontSize: '10px' }} />
             <Line
               type="monotone"
               dataKey={ticker1.toLowerCase()}
               stroke="#0066ff"
-              strokeWidth={2}
+              strokeWidth={1.5}
               dot={false}
               name={ticker1}
             />
@@ -181,7 +185,7 @@ export function StockChart({ data1, data2, ticker1, ticker2 }: StockChartProps) 
               type="monotone"
               dataKey={ticker2.toLowerCase()}
               stroke="#00cc88"
-              strokeWidth={2}
+              strokeWidth={1.5}
               dot={false}
               name={ticker2}
             />
