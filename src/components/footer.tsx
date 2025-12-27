@@ -1,9 +1,14 @@
+"use client"
+
 import { Github, Twitter } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { FeedbackModal } from "@/components/ui/feedback"
 import { FcAreaChart } from "react-icons/fc";
+import { useState } from "react"
 
 
 export function Footer() {
+  const [showFeedback, setShowFeedback] = useState(false)
   const links = {
     Product: ["Features", "Pricing", "Demo", "Integrations"],
     Company: ["About", "Blog", "Careers", "Press"],
@@ -37,7 +42,11 @@ export function Footer() {
             >
               <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
             </a>
-            <Button variant="link" className="text-[#0066ff] p-0 h-auto text-sm sm:text-base">
+            <Button
+              variant="link"
+              className="text-[#0066ff] p-0 h-auto text-sm sm:text-base"
+              onClick={() => setShowFeedback(true)}
+            >
               Give Feedback
             </Button>
           </div>
@@ -66,6 +75,8 @@ export function Footer() {
           </p>
         </div>
       </div>
+
+      <FeedbackModal isOpen={showFeedback} onClose={() => setShowFeedback(false)} />
     </footer>
   )
 }

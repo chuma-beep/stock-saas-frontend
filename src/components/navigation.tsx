@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { Button } from "@/components/ui/button"
+import { FeedbackModal } from "@/components/ui/feedback"
 import { Moon, Sun, Menu, X } from "lucide-react"
 import { FcAreaChart } from "react-icons/fc";
 
@@ -10,6 +11,7 @@ export function Navigation() {
   const [isDark, setIsDark] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [showFeedback, setShowFeedback] = useState(false)
 
   useEffect(() => {
     const savedTheme = localStorage.getItem("theme")
@@ -77,7 +79,12 @@ export function Navigation() {
             >
               {isDark ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
             </Button>
-            <Button className="bg-[#0066ff] hover:bg-[#0052cc] text-white">Give Feedback</Button>
+            <Button
+              className="bg-[#0066ff] hover:bg-[#0052cc] text-white"
+              onClick={() => setShowFeedback(true)}
+            >
+              Give Feedback
+            </Button>
           </div>
 
           <div className="md:hidden flex items-center gap-2">
@@ -109,12 +116,20 @@ export function Navigation() {
             <a href="#about" className="block text-sm hover:text-[#0066ff] transition-colors" onClick={() => setMobileMenuOpen(false)}>
               About
             </a>
-            <Button className="w-full bg-[#0066ff] hover:bg-[#0052cc] text-white" onClick={() => setMobileMenuOpen(false)}>
+            <Button
+              className="w-full bg-[#0066ff] hover:bg-[#0052cc] text-white"
+              onClick={() => {
+                setShowFeedback(true)
+                setMobileMenuOpen(false)
+              }}
+            >
               Give Feedback
             </Button>
           </div>
         )}
       </div>
+
+      <FeedbackModal isOpen={showFeedback} onClose={() => setShowFeedback(false)} />
     </nav>
   )
 }
