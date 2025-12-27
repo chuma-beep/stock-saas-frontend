@@ -7,7 +7,7 @@ import { Card } from "@/components/ui/card"
 
 const TECH_STACK = [
   {
-    name: "Next.js 15",
+    name: "Next.js 16",
     description: "Modern React framework for the frontend",
     color: "bg-white"
   },
@@ -15,11 +15,6 @@ const TECH_STACK = [
     name: "Go (Golang)",
     description: "High-performance backend API",
     color: "bg-cyan-500"
-  },
-  {
-    name: "Supabase",
-    description: "PostgreSQL database hosting",
-    color: "bg-emerald-500"
   },
   {
     name: "Groq AI",
@@ -157,18 +152,10 @@ export function About() {
               variant="outline"
               size="lg"
               className="gap-2"
-              onClick={() => window.open("https://twitter.com/chuma_beep", "_blank")}
+              onClick={() => window.open("https://twitter.com/wisdomsglow", "_blank")}
             >
               <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
               Follow on Twitter
-            </Button>
-            <Button
-              size="lg"
-              className="bg-[#0066ff] hover:bg-[#0052cc] text-white gap-2"
-              onClick={() => window.location.hash = ""}
-            >
-              <Mail className="h-4 w-4 sm:h-5 sm:w-5" />
-              Give Feedback
             </Button>
           </div>
         </Card>
