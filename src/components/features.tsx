@@ -1,11 +1,16 @@
 import { Card } from "@/components/ui/card"
-import { TrendingUp, Calendar, BarChart3, Layers, Download, DollarSign } from "lucide-react"
+import { TrendingUp, Calendar, BarChart3, Layers, Download, DollarSign, Sparkles } from "lucide-react"
 
 const FEATURES = [
   {
     icon: TrendingUp,
     title: "Real Market Data",
     description: "Access accurate, up-to-date stock market data from reliable sources",
+  },
+  {
+    icon: Sparkles,
+    title: "AI-Powered Analysis",
+    description: "Get intelligent insights from Groq AI that explain trends, risks, and opportunities in plain English",
   },
   {
     icon: Calendar,
@@ -21,11 +26,6 @@ const FEATURES = [
     icon: Layers,
     title: "Multiple Comparisons",
     description: "Compare multiple stocks side-by-side for deeper market insights",
-  },
-  {
-    icon: Download,
-    title: "Export Results",
-    description: "Download your analysis and share insights with your team",
   },
   {
     icon: DollarSign,

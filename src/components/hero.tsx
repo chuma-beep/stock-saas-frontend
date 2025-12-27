@@ -83,10 +83,10 @@ export function Hero() {
         <div className="text-center max-w-4xl mx-auto mb-8 sm:mb-12">
           <h1 className="text-3xl sm:text-5xl md:text-7xl font-bold mb-4 sm:mb-6 text-balance leading-tight">
             Compare Stock Performance{" "}
-            <span className="text-[#0066ff]">Across Any Time Period</span>
+            <span className="text-[#0066ff]">With AI Insights</span>
           </h1>
           <p className="text-base sm:text-xl md:text-2xl text-muted-foreground text-pretty">
-            Discover seasonal patterns and make data-driven decisions
+            Discover seasonal patterns and get AI-powered analysis for smarter trading decisions
           </p>
         </div>
 

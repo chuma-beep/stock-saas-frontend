@@ -27,10 +27,14 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
 
     if (isOpen) {
       document.addEventListener("keydown", handleEscape)
+      document.body.style.overflow = "hidden"
+      document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
     }
 
     return () => {
       document.removeEventListener("keydown", handleEscape)
+      document.body.style.overflow = ""
+      document.body.style.paddingRight = ""
     }
   }, [isOpen, onClose])
 

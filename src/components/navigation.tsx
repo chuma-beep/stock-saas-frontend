@@ -64,7 +64,7 @@ export function Navigation() {
             <a href="#how-it-works" className="text-sm hover:text-[#0066ff] transition-colors">
               How It Works
             </a>
-            <a href="#about" className="text-sm hover:text-[#0066ff] transition-colors">
+            <a href="#about-section" className="text-sm hover:text-[#0066ff] transition-colors">
               About
             </a>
           </div>
@@ -113,7 +113,7 @@ export function Navigation() {
             <a href="#how-it-works" className="block text-sm hover:text-[#0066ff] transition-colors" onClick={() => setMobileMenuOpen(false)}>
               How It Works
             </a>
-            <a href="#about" className="block text-sm hover:text-[#0066ff] transition-colors" onClick={() => setMobileMenuOpen(false)}>
+            <a href="#about-section" className="block text-sm hover:text-[#0066ff] transition-colors" onClick={() => setMobileMenuOpen(false)}>
               About
             </a>
             <Button
