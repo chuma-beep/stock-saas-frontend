@@ -27,7 +27,7 @@ export function Footer() {
 
           <div className="flex items-center gap-4 sm:gap-6">
             <a
-              href="https://github.com"
+              href="https://github.com/chuma-beep/stock-saas-frontend"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-[#0066ff] transition-colors"
@@ -35,7 +35,7 @@ export function Footer() {
               <Github className="h-4 w-4 sm:h-5 sm:w-5" />
             </a>
             <a
-              href="https://twitter.com"
+              href="https://x.com/gingerbarracuda"
               target="_blank"
               rel="noopener noreferrer"
               className="text-muted-foreground hover:text-[#0066ff] transition-colors"

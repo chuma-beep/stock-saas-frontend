@@ -155,7 +155,7 @@ export function About() {
               variant="outline"
               size="lg"
               className="gap-2"
-              onClick={() => window.open("https://github.com/chuma-beep/stock-saas", "_blank")}
+              onClick={() => window.open("https://github.com/chuma-beep/stock-saas-frontend", "_blank")}
             >
               <Github className="h-4 w-4 sm:h-5 sm:w-5" />
               View on GitHub
@@ -164,7 +164,7 @@ export function About() {
               variant="outline"
               size="lg"
               className="gap-2"
-              onClick={() => window.open("https://twitter.com/chuma_beep", "_blank")}
+              onClick={() => window.open("https://x.com/gingerbarracuda", "_blank")}
             >
               <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
               Follow on Twitter
