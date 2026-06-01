@@ -19,7 +19,7 @@ const ABOUT_HIGHLIGHTS = [
   {
     icon: Database,
     title: "Data Accuracy",
-    description: "Real-time stock data from Alpha Vantage API with historical accuracy",
+    description: "Real time stock data from Alpha Vantage API with historical accuracy",
   },
 ]
 
@@ -31,7 +31,7 @@ const TECH_STACK = [
   },
   {
     name: "Go (Golang)",
-    description: "High-performance backend API",
+    description: "High performance backend API",
     icon: <Cpu className="w-12 h-12 sm:w-16 sm:h-16 text-cyan-500" />,
   },
   {
@@ -87,7 +87,7 @@ export function About() {
             </p>
             <p className="text-sm sm:text-base text-muted-foreground leading-relaxed">
               When you compare stocks, our AI analyzes the data, identifies patterns, explains trends,
-              and highlights risks - all in simple, actionable language.
+              and highlights risks all in simple, actionable language.
             </p>
           </Card>
         </div>

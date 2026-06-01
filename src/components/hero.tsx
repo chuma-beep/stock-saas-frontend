@@ -86,7 +86,7 @@ export function Hero() {
             <span className="text-[#0066ff]">With AI Insights</span>
           </h1>
           <p className="text-base sm:text-xl md:text-2xl text-muted-foreground text-pretty">
-            Discover seasonal patterns and get AI-powered analysis for smarter trading decisions
+            Discover seasonal patterns and get AI powered analysis for smarter trading decisions
           </p>
         </div>
 

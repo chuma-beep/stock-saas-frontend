@@ -9,7 +9,7 @@ const FEATURES = [
   },
   {
     icon: Sparkles,
-    title: "AI-Powered Analysis",
+    title: "AI Powered Analysis",
     description: "Get intelligent insights from Groq AI that explain trends, risks, and opportunities in plain English",
   },
   {
