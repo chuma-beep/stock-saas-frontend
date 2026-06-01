@@ -303,7 +303,7 @@ export function Dashboard() {
               >
                 {isLoading ? (
                   <span className="flex items-center gap-2">
-                    <span className="animate-spin">⏳</span>
+                    <Loader2 className="h-5 w-5 animate-spin" />
                     Analyzing...
                   </span>
                 ) : (

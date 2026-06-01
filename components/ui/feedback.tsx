@@ -5,7 +5,7 @@ import { createPortal } from "react-dom"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
-import { X, Send } from "lucide-react"
+import { X, Send, Loader2 } from "lucide-react"
 import { toast } from "sonner"
 
 interface FeedbackModalProps {
@@ -140,7 +140,7 @@ export function FeedbackModal({ isOpen, onClose }: FeedbackModalProps) {
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
-                  <span className="animate-spin">⏳</span>
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   Sending...
                 </span>
               ) : (
