@@ -1,6 +1,6 @@
 "use client"
 
-import { Github, Twitter, Mail, Heart, Cpu, Database, Zap, Globe } from "lucide-react"
+import { Cpu, Database, Zap, Globe } from "lucide-react"
 import { FcAreaChart } from "react-icons/fc"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
@@ -137,40 +137,7 @@ export function About() {
           </div>
         </div>
 
-        {/* Creator & Contact */}
-        <Card className="p-6 sm:p-8 bg-card/50 backdrop-blur-sm max-w-3xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Heart className="h-5 w-5 sm:h-6 sm:w-6 text-red-500 fill-red-500" />
-            <h3 className="text-xl sm:text-2xl font-bold">Built with care</h3>
-          </div>
-          <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6">
-            StockCompare is developed and maintained by{" "}
-            <span className="font-semibold text-foreground">@chuma-beep</span>
-          </p>
-          <p className="text-xs sm:text-sm text-muted-foreground mb-6 sm:mb-8">
-            Have questions, suggestions, or want to contribute? We'd love to hear from you!
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-            <Button
-              variant="outline"
-              size="lg"
-              className="gap-2"
-              onClick={() => window.open("https://github.com/chuma-beep/stock-saas-frontend", "_blank")}
-            >
-              <Github className="h-4 w-4 sm:h-5 sm:w-5" />
-              View on GitHub
-            </Button>
-            <Button
-              variant="outline"
-              size="lg"
-              className="gap-2"
-              onClick={() => window.open("https://x.com/gingerbarracuda", "_blank")}
-            >
-              <Twitter className="h-4 w-4 sm:h-5 sm:w-5" />
-              Follow on Twitter
-            </Button>
-          </div>
-        </Card>
+
       </div>
     </section>
   )

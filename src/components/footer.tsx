@@ -47,7 +47,7 @@ export function Footer() {
               className="text-[#0066ff] p-0 h-auto text-sm sm:text-base"
               onClick={() => setShowFeedback(true)}
             >
-              Give Feedback
+             Give Feedback
             </Button>
           </div>
         </div>
